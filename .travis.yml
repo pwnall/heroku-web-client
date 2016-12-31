@@ -1,0 +1,19 @@
+sudo: required
+dist: trusty
+addons:
+  apt:
+    sources:
+    - google-chrome
+    packages:
+    - google-chrome-stable
+language: node_js
+node_js:
+- '7'
+before_script:
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- sleep 3
+- node test/setup.js
+env:
+  global:
+    secure: C3HN+BPPqrahPx1XT5jviIeOFtUasjfo5hwN6rGl2//6yQpk2DI6lZTUeMN0vCXhZdZ+qkuHTT0PmXRgpeATFjYKmiK5u60bdfpTG45p0Hu4//QtU/BHpgZDaBDgX0eaZcy3aPpyXXe7W42nCkgHXRjGooK7QzFKNLQ5qGUioqJNZpf6YsrN89iate2dD8n8OlgY+5nJF/dUv1pib3zVToHcSBDYzieEohFI5ygWiozKQ7THBAAxGzteJNkjvIZRVqebVnTvFggiHrRFak3IMa12JQv5ua8Q9riZLQCj0BcBzp1/0Br73Waq+T+KFIabuUUtOkJ/f1DxFl01shtBYgKjgg6SrGdOK9en2RANn58cwLAU2QDbT+L/YqAq0J/JDAIBuIbSwz3UNBUqcpbTVzActAqGPcxjNTtZSamwWSAmnlgqRAzeTy713cw/N549he4Yb7ZU4GYKLrECKwjpdWNSCLb4CWiI+aUD7uemhdIWwINnPuTMaz4NRX6C5lyfiZAIwy0m5Acnw3XxZ+FHJeRi6Qtb5R0ziK+2+3gSx2o17M01X073agpO1YiX9Olgy8b+VQrUq9kTEiGaBNvySJ6UcFjqG5qB6ivdMWI1SbcFYX9kkHjyiUErssqvzuOR9GZ1+g6awTbji6PJlv7hV5DHODylwGRAzCDLe7Y/4Nc=

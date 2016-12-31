@@ -122,7 +122,7 @@ describe('Client', () => {
         });
       });
 
-      it.only('removes the attachment from the #attachments list', () => {
+      it('removes the attachment from the #attachments list', () => {
         return client.deleteAttachment(app, attachment).
             then((deletedAttachment) => {
           expect(deletedAttachment.addonName).to.equal('heroku-postgresql');

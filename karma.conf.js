@@ -39,6 +39,8 @@ module.exports = function(config) {
     logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: ['Chrome'],
+    browserDisconnectTimeout: 30 * 1000,
+    browserDisconnectTolerance: 10,
     browserNoActivityTimeout: 120 * 1000,  // Our tests can take a long time.
     captureTimeout: 120 * 1000,
     singleRun: false,
