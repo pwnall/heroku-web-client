@@ -119,6 +119,22 @@ export const herokuApp = {
 };
 
 // The example below is straight from Heroku's platform documentation.
+// https://devcenter.heroku.com/articles/platform-api-reference#formation
+export const herokuFormation = {
+  'app': {
+    'id': '01234567-89ab-cdef-0123-456789abcdef',
+    'name': 'example',
+  },
+  'command': 'bundle exec rails server -p $PORT',
+  'created_at': '2012-01-01T12:00:00Z',
+  'id': '11234567-89ab-cdef-0123-456789abcdef',
+  'quantity': 1,
+  'size': 'standard-1X',
+  'type': 'web',
+  'updated_at': '2012-01-02T12:00:00Z',
+};
+
+// The example below is straight from Heroku's platform documentation.
 // https://devcenter.heroku.com/articles/platform-api-reference#plan
 export const herokuPlan = {
   'addon_service': {
@@ -160,6 +176,32 @@ export const herokuRegion = {
     'region': 'us-east-1',
   },
   'updated_at': '2012-01-01T12:00:00Z',
+};
+
+// The example below is straight from Heroku's platform documentation.
+// https://devcenter.heroku.com/articles/platform-api-reference#release
+export const herokuRelease = {
+  'addon_plan_names': [
+    'heroku-postgresql:dev',
+  ],
+  'app': {
+    'id': '01234567-89ab-cdef-0123-456789abcdef',
+    'name': 'example',
+  },
+  'created_at': '2012-01-01T12:00:00Z',
+  'current': true,
+  'description': 'Added new feature',
+  'id': '11234567-89ab-cdef-0123-456789abcdef',
+  'slug': {
+    'id': '21234567-89ab-cdef-0123-456789abcdef',
+  },
+  'status': 'succeeded',
+  'updated_at': '2012-01-02T12:00:00Z',
+  'user': {
+    'email': 'username@example.com',
+    'id': '31234567-89ab-cdef-0123-456789abcdef',
+  },
+  'version': 11,
 };
 
 // The example below is straight from Heroku's platform documentation.

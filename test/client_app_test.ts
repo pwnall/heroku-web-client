@@ -6,6 +6,7 @@ import { App } from '../src/app';
 import { Attachment } from '../src/attachment';
 import { Build } from '../src/build';
 import { DirectCredential } from '../src/direct_credential';
+import { Release } from '../src/release';
 import { SourceBlob } from '../src/source_blob';
 import { appSlug, herokuAccount, testApp } from './test_data_helper';
 
@@ -209,6 +210,85 @@ describe('Client', () => {
           expect(build.userEmail).to.equal(herokuAccount.email);
         });
       });
+
+      it('creates a build whose release works with #release', () => {
+        let releaseId: string;
+        return client.createBuild(app, {
+            buildpackUrls: buildpackUrls, sourceBlob: sourceBlob }).
+            then((build) => {
+          return client.waitForBuild(app, build);
+        }).then((build) => {
+          releaseId = build.releaseId;
+          return client.release(app, releaseId);
+        }).then((release) => {
+          expect(release.appId).to.equal(app.id);
+          expect(release.appName).to.equal(appName);
+          expect(release.current).to.equal(true);
+          expect(release.id).to.equal(releaseId);
+          expect(release.status).to.equal('succeeded');
+          expect(release.userEmail).to.equal(herokuAccount.email);
+        });
+      });
+
+      it('creates a build whose release shows up in #releases', () => {
+        let releaseId: string;
+        return client.createBuild(app, {
+            buildpackUrls: buildpackUrls, sourceBlob: sourceBlob }).
+            then((build) => {
+          return client.waitForBuild(app, build);
+        }).then((build) => {
+          releaseId = build.releaseId;
+          return client.releases(app);
+        }).then((releases) => {
+          expect(releases.length).to.be.greaterThan(0);
+          assert(releases.find((release: Release) => {
+            return release.id === releaseId;
+          }));
+        });
+      });
+    });
+
+    describe('#updateFormations', () => {
+      const buildpackUrls =
+          ['https://github.com/heroku/heroku-buildpack-nodejs'];
+      beforeEach(() => {
+        const sourceBlob = new SourceBlob({
+            checksum: `SHA256:${testApp.sha256}`, url: testApp.url,
+            version: 'v1.0.42' });
+        return client.createBuild(app, {
+            buildpackUrls: buildpackUrls, sourceBlob: sourceBlob }).
+            then((build) => {
+          return client.waitForBuild(app, build);
+        });
+      });
+
+      it('updates get reflected in the #formations list', () => {
+        return client.updateFormations(app, {
+          web: { dynoType: 'Free', quantity: 0 },
+        }).then((formations) => {
+          expect(formations.length).to.equal(1);
+          const formation = formations[0];
+          expect(formation.appId).to.equal(app.id);
+          expect(formation.appName).to.equal(appName);
+          expect(formation.command).to.equal('npm start');
+          expect(formation.dynoType).to.equal('Free');
+          expect(formation.processType).to.equal('web');
+          expect(formation.quantity).to.equal(0);
+
+          return client.updateFormations(app, {
+            web: { dynoType: 'Free', quantity: 1 },
+          });
+        }).then((formations) => {
+          expect(formations.length).to.equal(1);
+          const formation = formations[0];
+          expect(formation.appId).to.equal(app.id);
+          expect(formation.appName).to.equal(appName);
+          expect(formation.command).to.equal('npm start');
+          expect(formation.dynoType).to.equal('Free');
+          expect(formation.processType).to.equal('web');
+          expect(formation.quantity).to.equal(1);
+        });
+      });
     });
 
     describe('#createSlug', () => {
@@ -251,6 +331,48 @@ describe('Client', () => {
           expect(slug.processTypes).to.deep.equal({
               web: 'node/bin/node minimal.js' });
           expect(slug.stackName).to.equal('cedar-14');
+        });
+      });
+    });
+
+    describe('#updateConfigVars', () => {
+      it('creates variables that show up in #configVars', () => {
+        return client.updateConfigVars(app, {
+          RESOURCE: 'pseudo.credential',
+          TEST_NAME: 'heroku-web-client',
+        }).then((configVars) => {
+          expect(configVars).to.deep.equal({
+            RESOURCE: 'pseudo.credential',
+            TEST_NAME: 'heroku-web-client',
+          });
+          return client.configVars(app);
+        }).then((configVars) => {
+          expect(configVars).to.deep.equal({
+            RESOURCE: 'pseudo.credential',
+            TEST_NAME: 'heroku-web-client',
+          });
+        });
+      });
+
+      it('deletes variables', () => {
+        return client.updateConfigVars(app, {
+          RESOURCE: 'pseudo.credential',
+          TEST_NAME: 'heroku-web-client',
+        }).then((configVars) => {
+          expect(configVars).to.deep.equal({
+            RESOURCE: 'pseudo.credential',
+            TEST_NAME: 'heroku-web-client',
+          });
+          return client.updateConfigVars(app, { RESOURCE: null });
+        }).then((configVars) => {
+          expect(configVars).to.deep.equal({
+            TEST_NAME: 'heroku-web-client',
+          });
+          return client.configVars(app);
+        }).then((configVars) => {
+          expect(configVars).to.deep.equal({
+            TEST_NAME: 'heroku-web-client',
+          });
         });
       });
     });

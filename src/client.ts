@@ -13,12 +13,23 @@ import {
   CreateBuildOptions, createBuildOptionsToFetchBody,
 } from './create_build_options';
 import {
+  CreateReleaseOptions, createReleaseOptionsToFetchBody,
+} from './create_release_options';
+import {
   CreateSlugOptions, createSlugOptionsToFetchBody,
 } from './create_slug_options';
+import {
+  ConfigVarUpdates, configVarUpdatesToFetchBody,
+} from './config_var_updates';
 import { DirectCredential } from './direct_credential';
 import { HerokuError } from './error';
+import { Formation } from './formation';
+import {
+  FormationUpdates, formationUpdatesToFetchBody,
+} from './formation_updates';
 import { Plan } from './plan';
 import { Region } from './region';
+import { Release } from './release';
 import { Slug } from './slug';
 import { Stack } from './stack';
 import { AccessToken } from './tokens';
@@ -502,6 +513,199 @@ export class Client {
         }
         if (Date.now() > stopWaitingAt) {
           throw new Error('Timed out waiting for the Heroku build');
+        }
+        return new Promise((resolve) => {
+          // Wait between checks so we don't hammer Heroku's API and run out of
+          // quota if the user has a fast Internet connection.
+          setTimeout(resolve, 1000);
+        }).then(() => step());
+      });
+    };
+    return step();
+  }
+
+  /** Fetches an application's configuration (environment) variables. */
+  public configVars(app: App | string): Promise<{[name: string]: string}> {
+    const appId = App.toUrlSegment(app);
+    return fetch(`${this.rootUrl}/apps/${appId}/config-vars`, {
+      headers: {
+        'Accept': 'application/vnd.heroku+json; version=3',
+        'Authorization': this.token.authorizationHeader(),
+      },
+      method: 'GET',
+      referrer: 'no-referrer',
+    }).then((response: Response) => {
+      return HerokuError.parseResponse(response);
+    }).then((response: Response) => {
+      return response.json();
+    }).then((herokuConfigVars: any) => {
+      // TODO(pwnall): Is this worth parsing and error-checking?
+      return herokuConfigVars as {[name: string]: string};
+    });
+  }
+
+  /** Creates a Heroku build for an application. */
+  public updateConfigVars(app: App, updates: ConfigVarUpdates):
+      Promise<{[name: string]: string}> {
+    const appId = App.toUrlSegment(app);
+    return fetch(`${this.rootUrl}/apps/${appId}/config-vars`, {
+      body: configVarUpdatesToFetchBody(updates),
+      headers: {
+        'Accept': 'application/vnd.heroku+json; version=3',
+        'Authorization': this.token.authorizationHeader(),
+        'Content-Type': 'application/json',
+      },
+      method: 'PATCH',
+      referrer: 'no-referrer',
+    }).then((response: Response) => {
+      return HerokuError.parseResponse(response);
+    }).then((response: Response) => {
+      return response.json();
+    }).then((herokuConfigVars: any) => {
+      // TODO(pwnall): Is this worth parsing and error-checking?
+      return herokuConfigVars as {[name: string]: string};
+    });
+  }
+
+  /** Fetches an application's dynos running predefined process types. */
+  public formations(app: App | string): Promise<Formation[]> {
+    const appId = App.toUrlSegment(app);
+    return fetch(`${this.rootUrl}/apps/${appId}/formation`, {
+      headers: {
+        'Accept': 'application/vnd.heroku+json; version=3',
+        'Authorization': this.token.authorizationHeader(),
+      },
+      method: 'GET',
+      referrer: 'no-referrer',
+    }).then((response: Response) => {
+      return HerokuError.parseResponse(response);
+    }).then((response: Response) => {
+      return response.json();
+    }).then((herokuFormations: any) => {
+      const formations: Formation[] = [];
+      for (let i = 0; i < herokuFormations.length; ++i) {
+        const formation = Formation.fromHerokuFormation(herokuFormations[i]);
+        if (formation === null) {
+          continue;
+        }
+        formations.push(formation);
+      }
+      return formations;
+    });
+  }
+
+  /** Updates an application's formations (dynos running process types). */
+  public updateFormations(app: App | string, updates: FormationUpdates):
+      Promise<Formation[]> {
+    const appId = App.toUrlSegment(app);
+    return fetch(`${this.rootUrl}/apps/${appId}/formation`, {
+      body: formationUpdatesToFetchBody(updates),
+      headers: {
+        'Accept': 'application/vnd.heroku+json; version=3',
+        'Authorization': this.token.authorizationHeader(),
+        'Content-Type': 'application/json',
+      },
+      method: 'PATCH',
+      referrer: 'no-referrer',
+    }).then((response: Response) => {
+      return HerokuError.parseResponse(response);
+    }).then((response: Response) => {
+      return response.json();
+    }).then((herokuFormations: any) => {
+      const formations: Formation[] = [];
+      for (let i = 0; i < herokuFormations.length; ++i) {
+        const formation = Formation.fromHerokuFormation(herokuFormations[i]);
+        if (formation === null) {
+          continue;
+        }
+        formations.push(formation);
+      }
+      return formations;
+    });
+  }
+
+  /** Fetches a release's information. */
+  public release(app: App | string, release: Release | string):
+      Promise<Release> {
+    const appId = App.toUrlSegment(app);
+    const releaseId: string = Release.toUrlSegment(release);
+    return fetch(`${this.rootUrl}/apps/${appId}/releases/${releaseId}`, {
+      headers: {
+        'Accept': 'application/vnd.heroku+json; version=3',
+        'Authorization': this.token.authorizationHeader(),
+      },
+      method: 'GET',
+      referrer: 'no-referrer',
+    }).then((response: Response) => {
+      return HerokuError.parseResponse(response);
+    }).then((response: Response) => {
+      return response.json();
+    }).then((herokuRelease: any) => {
+      return Release.fromHerokuRelease(herokuRelease);
+    });
+  }
+
+  /** Fetches an application's releases. */
+  public releases(app: App | string): Promise<Release[]> {
+    const appId = App.toUrlSegment(app);
+    return fetch(`${this.rootUrl}/apps/${appId}/releases`, {
+      headers: {
+        'Accept': 'application/vnd.heroku+json; version=3',
+        'Authorization': this.token.authorizationHeader(),
+      },
+      method: 'GET',
+      referrer: 'no-referrer',
+    }).then((response: Response) => {
+      return HerokuError.parseResponse(response);
+    }).then((response: Response) => {
+      return response.json();
+    }).then((herokuReleases: any) => {
+      const releases: Release[] = [];
+      for (let i = 0; i < herokuReleases.length; ++i) {
+        const release = Release.fromHerokuRelease(herokuReleases[i]);
+        if (release === null) {
+          continue;
+        }
+        releases.push(release);
+      }
+      return releases;
+    });
+  }
+
+  /** Creates a Heroku release for an application. */
+  public createRelease(app: App, options: CreateReleaseOptions):
+      Promise<Release> {
+    const appId = App.toUrlSegment(app);
+    return fetch(`${this.rootUrl}/apps/${appId}/releases`, {
+      body: createReleaseOptionsToFetchBody(options),
+      headers: {
+        'Accept': 'application/vnd.heroku+json; version=3',
+        'Authorization': this.token.authorizationHeader(),
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      referrer: 'no-referrer',
+    }).then((response: Response) => {
+      return HerokuError.parseResponse(response);
+    }).then((response: Response) => {
+      return response.json();
+    }).then((herokuRelease: any) => {
+      return Release.fromHerokuRelease(herokuRelease);
+    });
+  }
+
+  /** Waits for a release to leave the pending state. */
+  public waitForRelease(
+      app: App | string, release: Release | string,
+      milliseconds: number = 60000): Promise<Release> {
+    const stopWaitingAt = Date.now() + milliseconds;
+    const step = (): Promise<Release> => {
+      return this.release(app, release).then((newRelease) => {
+        if (newRelease.status !== 'pending') {
+          return newRelease;
+        }
+        if (Date.now() > stopWaitingAt) {
+          throw new Error('Timed out waiting for the Heroku release');
         }
         return new Promise((resolve) => {
           // Wait between checks so we don't hammer Heroku's API and run out of

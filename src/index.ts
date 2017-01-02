@@ -5,8 +5,10 @@ import { Attachment } from './attachment';
 import { Build } from './build';
 import { Client } from './client';
 import { DirectCredential, DirectCredentialJSON } from './direct_credential';
+import { Formation } from './formation';
 import { Plan } from './plan';
 import { Region } from './region';
+import { Release } from './release';
 import { Slug } from './slug';
 import { SourceBlob } from './source_blob';
 import { Stack } from './stack';
@@ -18,7 +20,7 @@ export {
   Account, Addon, App, Attachment, Build,
   Client,
   DirectCredential, DirectCredentialJSON,
-  Plan,
+  Formation, Plan,
   RefreshToken, RefreshTokenJSON,
-  Region, Slug, SourceBlob, Stack,
+  Region, Release, Slug, SourceBlob, Stack,
 };

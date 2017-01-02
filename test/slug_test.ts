@@ -79,7 +79,9 @@ describe('Slug', () => {
     // TODO(pwnall): Slug uploading does not work because Heroku's S3 bucket
     //               does not accept CORS requests.
     //               https://help.heroku.com/tickets/436606
-    it.skip('creates a slug that can be downloaded by #download', () => {
+    // TODO(pwnall): When this works, test Client#createRelease and
+    //               Client#waitForRelease in client_app_test.ts.
+    it.skip("sets the slug's size", () => {
       let slugId: string;
       return client.createSlug(app, {
           checksum: slugChecksum,

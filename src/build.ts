@@ -70,8 +70,10 @@ export class Build {
         typeof(herokuBuild.created_at) !== 'string' ||
         typeof(herokuBuild.id) !== 'string' ||
         typeof(herokuBuild.output_stream_url) !== 'string' ||
-        typeof(herokuBuild.release) !== 'object' ||
-        typeof(herokuBuild.slug) !== 'object' ||
+        (herokuBuild.release !== null &&
+         typeof(herokuBuild.release) !== 'object') ||
+        (herokuBuild.slug !== null &&
+         typeof(herokuBuild.slug) !== 'object') ||
         (herokuBuild.status !== 'failed' && herokuBuild.status !== 'pending' &&
          herokuBuild.status !== 'succeeded') ||
         typeof(herokuBuild.updated_at) !== 'string' ||
@@ -79,6 +81,9 @@ export class Build {
       return null;
     }
 
+    if (typeof(herokuBuild.app.id) !== 'string') {
+      return null;
+    }
     if (herokuBuild.buildpacks !== null) {
       for (let buildPack of herokuBuild.buildpacks) {
         if (typeof(buildPack) !== 'object' ||
