@@ -5,24 +5,32 @@ module.exports = {
   output: {
     path: __dirname + '/lib',
     filename: 'index.js',
-    library: true,
+    library: 'heroku-web-client',
     libraryTarget: 'commonjs2',
   },
   devtool: 'source-map',
   resolve: {
-    extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js', '.json'],
-    modulesDirectories: ['node_modules'],
-    root: [
-      path.resolve('.'),
+    modules: [
+      __dirname,
+      "node_modules",
     ],
+    extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js', '.json'],
   },
   module: {
-    preLoaders: [
-      { test: /\.ts$/, loader: 'tslint-loader' },
-    ],
-    loaders: [
-      { test: /\.json$/, loader: 'json-loader' },
-      { test: /\.ts$/, loader: 'ts-loader' },
+    rules: [
+      {
+        test: /\.ts$/,
+        use: 'tslint-loader',
+        enforce: 'pre',
+      },
+      {
+        test: /\.ts$/,
+        use: 'ts-loader',
+      },
+      {
+        test: /\.tar\.gz$/,
+        use: 'arraybuffer-loader',
+      },
     ],
   },
 };
