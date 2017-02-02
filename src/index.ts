@@ -11,6 +11,7 @@ import { Region } from './region';
 import { Release } from './release';
 import { Slug } from './slug';
 import { SourceBlob } from './source_blob';
+import { SourceLocation } from './source_location';
 import { Stack } from './stack';
 import { AccessToken, AccessTokenJSON, RefreshToken, RefreshTokenJSON } from
     './tokens';
@@ -22,5 +23,5 @@ export {
   DirectCredential, DirectCredentialJSON,
   Formation, Plan,
   RefreshToken, RefreshTokenJSON,
-  Region, Release, Slug, SourceBlob, Stack,
+  Region, Release, Slug, SourceBlob, SourceLocation, Stack,
 };

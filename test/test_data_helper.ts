@@ -21,5 +21,6 @@ export const herokuAccount: HerokuAccountJSON =
 
 export const testApp: TestAppJSON = require('testdata/test_app.json');
 
+export const appArchive: ArrayBuffer = require('testdata/test_app.tar.gz');
 export const appSlug: ArrayBuffer = require('testdata/slug.tar.gz');
 // tslint:enable:no-var-requires

@@ -31,6 +31,7 @@ import { Plan } from './plan';
 import { Region } from './region';
 import { Release } from './release';
 import { Slug } from './slug';
+import { SourceLocation } from './source_location';
 import { Stack } from './stack';
 import { AccessToken } from './tokens';
 
@@ -760,6 +761,31 @@ export class Client {
       return response.json();
     }).then((herokuSlug: any) => {
       return Slug.fromHerokuSlug(herokuSlug);
+    });
+  }
+
+  /** Creates a Heroku-managed location for uploading a source archive.
+   *
+   * The location is valid for a limited time. Source locations are expected to
+   * be used as arguments to createBuild, when the source archive is not
+   * already published to an URL.
+   */
+  public createSourceLocation(): Promise<SourceLocation> {
+    return fetch(`${this.rootUrl}/sources`, {
+      body: '{}',
+      headers: {
+        'Accept': 'application/vnd.heroku+json; version=3',
+        'Authorization': this.token.authorizationHeader(),
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      referrer: 'no-referrer',
+    }).then((response: Response) => {
+      return HerokuError.parseResponse(response);
+    }).then((response: Response) => {
+      return response.json();
+    }).then((herokuSource: any) => {
+      return SourceLocation.fromHerokuSource(herokuSource);
     });
   }
 }

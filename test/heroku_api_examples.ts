@@ -215,6 +215,15 @@ export const herokuStack = {
 };
 
 // The example below is straight from Heroku's platform documentation.
+// https://devcenter.heroku.com/articles/platform-api-reference#source
+export const herokuSource = {
+  'source_blob': {
+    'get_url': 'https://api.heroku.com/sources/1234.tgz',
+    'put_url': 'https://api.heroku.com/sources/12345.tgz',
+  },
+};
+
+// The example below is straight from Heroku's platform documentation.
 // https://devcenter.heroku.com/articles/platform-api-reference#stack
 export const herokuSourceBlobShaValue =
     'SHA256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
