@@ -26,7 +26,7 @@
     "sourceMap": true,
     "strictNullChecks": false,
     "target": "es2015",
-    "types": ["mocha", "text-encoding", "whatwg-fetch"]
+    "types": ["mocha", "text-encoding"]
   },
   "exclude": [
     ".git",

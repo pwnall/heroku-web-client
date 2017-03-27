@@ -49,6 +49,7 @@ export class Client {
    */
   public constructor() {
     this.rootUrl = 'https://api.heroku.com';
+    this.token = null;
   }
 
   /** Logs in with an email/password or an API key. */

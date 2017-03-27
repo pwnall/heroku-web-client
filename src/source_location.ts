@@ -40,6 +40,9 @@ export class SourceLocation {
       // NOTE: Headers is intentionally missing. Setting a Content-Type would
       //       cause the CORS request to be rejected, because of the CORS ACL
       //       that Heroku has set up on its source bucket.
+      // headers: {
+      //  'Content-Type': 'application/zip',
+      // },
       method: 'PUT',
       referrer: 'no-referrer',
     }).then((response: Response) => {

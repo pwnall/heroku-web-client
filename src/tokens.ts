@@ -3,10 +3,10 @@ export interface RefreshTokenJSON {
   /** The OAuth client ID associated with this token. */
   readonly clientId: string;
 
-  /** The time when the readonly token expires. */
+  /** The time when the refresh token expires. */
   readonly expiresAt: number;
 
-  /** The refresh token token. */
+  /** The refresh token. */
   readonly token: string;
 }
 
@@ -41,7 +41,7 @@ export class RefreshToken {
 /** The JSON serialization of AccessToken. */
 export interface AccessTokenJSON {
   /**
-   * The time when the readonly token expires. null if the token never expires.
+   * The time when the access token expires. null if the token never expires.
    *
    * Tokens obtained from direct authorization never expire.
    */
@@ -65,7 +65,7 @@ export class AccessToken {
   /** The authorization behind the access token. */
   private readonly _id: string;
 
-  /** The refresh token token. */
+  /** The access token. */
   private readonly _token: string;
 
   /** Creates an OAuth 2.0 access token from a JSON representation. */
