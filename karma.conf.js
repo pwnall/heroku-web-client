@@ -1,7 +1,7 @@
 // Karma configuration
-var webpackConfig = require('./webpack.config');
+const webpackConfig = require('./webpack.config');
 
-module.exports = function(config) {
+module.exports = (config) => {
   config.set({
     basePath: '',
     client: {
@@ -35,8 +35,6 @@ module.exports = function(config) {
 
     reporters: ['progress'],
     port: 9876,
-    colors: true,
-    logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: ['Chrome'],
     browserDisconnectTimeout: 30 * 1000,

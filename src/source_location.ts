@@ -57,6 +57,6 @@ export class SourceLocation {
       referrer: 'no-referrer',
     }).then((response: Response) => {
       return HerokuError.parseResponse(response);
-    }).then((response) => response);
+    }).then(response => response);
   }
 }

@@ -28,7 +28,7 @@ describe('createAppOptionsToFetchBody', () => {
 
   it('converts an options object that uses a Region', () => {
     const body = JSON.parse(createAppOptionsToFetchBody({
-        name: 'test-name', region: region, stack: 'test-stack'}));
+        name: 'test-name', region, stack: 'test-stack'}));
     expect(body).to.deep.equal({
         name: 'test-name', region: '01234567-89ab-cdef-0123-456789abcdef',
         stack: 'test-stack'});
@@ -36,7 +36,7 @@ describe('createAppOptionsToFetchBody', () => {
 
   it('converts an options object that uses a Stack', () => {
     const body = JSON.parse(createAppOptionsToFetchBody({
-        name: 'test-name', region: 'test-region', stack: stack}));
+        name: 'test-name', region: 'test-region', stack}));
     expect(body).to.deep.equal({
         name: 'test-name', region: 'test-region',
         stack: '01234567-89ab-cdef-0123-456789abcdef'});

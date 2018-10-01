@@ -25,7 +25,7 @@ Install the project's dependencies and run a one-time setup script.
 
 ```bash
 npm install
-node test/setup.js
+HEROKU_ACCOUNT=email:password node test/setup.js
 ```
 
 Create a testing Heroku account and plug in the email and password into

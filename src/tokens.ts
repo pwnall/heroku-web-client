@@ -99,8 +99,7 @@ export class AccessToken {
         referenceTimestamp + token.expires_in;
 
     return new AccessToken({
-      expiresAt: expiresAt, id: authorization.id as string,
-      token: token.token as string,
+      expiresAt, id: authorization.id as string, token: token.token as string,
     });
   }
 

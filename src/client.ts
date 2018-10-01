@@ -1,8 +1,11 @@
 import { Account } from './account';
 import { Addon } from './addon';
-import { Attachment } from './attachment';
 import { App } from './app';
+import { Attachment } from './attachment';
 import { Build } from './build';
+import {
+  ConfigVarUpdates, configVarUpdatesToFetchBody,
+} from './config_var_updates';
 import {
   CreateAppOptions, createAppOptionsToFetchBody,
 } from './create_app_options';
@@ -18,9 +21,6 @@ import {
 import {
   CreateSlugOptions, createSlugOptionsToFetchBody,
 } from './create_slug_options';
-import {
-  ConfigVarUpdates, configVarUpdatesToFetchBody,
-} from './config_var_updates';
 import { DirectCredential } from './direct_credential';
 import { HerokuError } from './error';
 import { Formation } from './formation';
@@ -57,8 +57,8 @@ export class Client {
     return fetch(`${this.rootUrl}/oauth/authorizations`, {
       body: JSON.stringify({}),
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': credential.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: credential.authorizationHeader(),
         'Content-Type': 'application/json',
       },
       method: 'POST',
@@ -83,8 +83,8 @@ export class Client {
     const id = this.token.authorizationId();
     return fetch(`${this.rootUrl}/oauth/authorizations/${id}`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
       },
       method: 'DELETE',
       referrer: 'no-referrer',
@@ -102,8 +102,8 @@ export class Client {
   public account(): Promise<Account> {
     return fetch(`${this.rootUrl}/account`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
       },
       method: 'GET',
       referrer: 'no-referrer',
@@ -121,7 +121,7 @@ export class Client {
     const addonId = Addon.toUrlSegment(addon);
     return fetch(`${this.rootUrl}/addon-services/${addonId}`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
+        Accept: 'application/vnd.heroku+json; version=3',
       },
       method: 'GET',
       referrer: 'no-referrer',
@@ -138,7 +138,7 @@ export class Client {
   public addons(): Promise<Addon[]> {
     return fetch(`${this.rootUrl}/addon-services/`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
+        Accept: 'application/vnd.heroku+json; version=3',
       },
       method: 'GET',
       referrer: 'no-referrer',
@@ -148,8 +148,8 @@ export class Client {
       return response.json();
     }).then((herokuAddonServices: any) => {
       const addons: Addon[] = [];
-      for (let i = 0; i < herokuAddonServices.length; ++i) {
-        const addon = Addon.fromHerokuAddonService(herokuAddonServices[i]);
+      for (const herokuAddonService of herokuAddonServices) {
+        const addon = Addon.fromHerokuAddonService(herokuAddonService);
         if (addon === null) {
           continue;
         }
@@ -164,7 +164,7 @@ export class Client {
     const addonId = Addon.toUrlSegment(addon);
     return fetch(`${this.rootUrl}/addon-services/${addonId}/plans`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
+        Accept: 'application/vnd.heroku+json; version=3',
       },
       method: 'GET',
       referrer: 'no-referrer',
@@ -174,8 +174,8 @@ export class Client {
       return response.json();
     }).then((herokuPlans: any) => {
       const plans: Plan[] = [];
-      for (let i = 0; i < herokuPlans.length; ++i) {
-        const plan = Plan.fromHerokuPlan(herokuPlans[i]);
+      for (const herokuPlan of herokuPlans) {
+        const plan = Plan.fromHerokuPlan(herokuPlan);
         if (plan === null) {
           continue;
         }
@@ -189,8 +189,8 @@ export class Client {
   public regions(): Promise<Region[]> {
     return fetch(`${this.rootUrl}/regions/`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
       },
       method: 'GET',
       referrer: 'no-referrer',
@@ -200,8 +200,8 @@ export class Client {
       return response.json();
     }).then((herokuRegions: any) => {
       const regions: Region[] = [];
-      for (let i = 0; i < herokuRegions.length; ++i) {
-        const region = Region.fromHerokuRegion(herokuRegions[i]);
+      for (const herokuRegion of herokuRegions) {
+        const region = Region.fromHerokuRegion(herokuRegion);
         if (region === null) {
           continue;
         }
@@ -215,8 +215,8 @@ export class Client {
   public stacks(): Promise<Stack[]> {
     return fetch(`${this.rootUrl}/stacks/`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
       },
       method: 'GET',
       referrer: 'no-referrer',
@@ -226,8 +226,8 @@ export class Client {
       return response.json();
     }).then((herokuStacks: any) => {
       const stacks: Stack[] = [];
-      for (let i = 0; i < herokuStacks.length; ++i) {
-        const stack = Stack.fromHerokuStack(herokuStacks[i]);
+      for (const herokuStack of herokuStacks) {
+        const stack = Stack.fromHerokuStack(herokuStack);
         if (stack === null) {
           continue;
         }
@@ -241,8 +241,8 @@ export class Client {
   public apps(): Promise<App[]> {
     return fetch(`${this.rootUrl}/apps/`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
       },
       method: 'GET',
       referrer: 'no-referrer',
@@ -252,8 +252,8 @@ export class Client {
       return response.json();
     }).then((herokuApps: any) => {
       const apps: App[] = [];
-      for (let i = 0; i < herokuApps.length; ++i) {
-        const app = App.fromHerokuApp(herokuApps[i]);
+      for (const herokuApp of herokuApps) {
+        const app = App.fromHerokuApp(herokuApp);
         if (app === null) {
           continue;
         }
@@ -268,8 +268,8 @@ export class Client {
     const appId = App.toUrlSegment(app);
     return fetch(`${this.rootUrl}/apps/${appId}`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
       },
       method: 'GET',
       referrer: 'no-referrer',
@@ -287,8 +287,8 @@ export class Client {
     return fetch(`${this.rootUrl}/apps/`, {
       body: createAppOptionsToFetchBody(options),
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
         'Content-Type': 'application/json',
       },
       method: 'POST',
@@ -307,8 +307,8 @@ export class Client {
     const appId: string = App.toUrlSegment(app);
     return fetch(`${this.rootUrl}/apps/${appId}`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
       },
       method: 'DELETE',
       referrer: 'no-referrer',
@@ -328,8 +328,8 @@ export class Client {
     const attachmentId = Attachment.toUrlSegment(attachment);
     return fetch(`${this.rootUrl}/apps/${appId}/addons/${attachmentId}`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
       },
       method: 'GET',
       referrer: 'no-referrer',
@@ -347,8 +347,8 @@ export class Client {
     const appId = App.toUrlSegment(app);
     return fetch(`${this.rootUrl}/apps/${appId}/addons`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
       },
       method: 'GET',
       referrer: 'no-referrer',
@@ -358,8 +358,8 @@ export class Client {
       return response.json();
     }).then((herokuAddons: any) => {
       const attachments: Attachment[] = [];
-      for (let i = 0; i < herokuAddons.length; ++i) {
-        const attachment = Attachment.fromHerokuAddon(herokuAddons[i]);
+      for (const herokuAddon of herokuAddons) {
+        const attachment = Attachment.fromHerokuAddon(herokuAddon);
         if (attachment === null) {
           continue;
         }
@@ -376,8 +376,8 @@ export class Client {
     return fetch(`${this.rootUrl}/apps/${appId}/addons`, {
       body: createAttachmentOptionsToFetchBody(options),
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
         'Content-Type': 'application/json',
       },
       method: 'POST',
@@ -398,8 +398,8 @@ export class Client {
     const attachmentId = Attachment.toUrlSegment(attachment);
     return fetch(`${this.rootUrl}/apps/${appId}/addons/${attachmentId}`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
       },
       method: 'DELETE',
       referrer: 'no-referrer',
@@ -418,18 +418,18 @@ export class Client {
       milliseconds: number = 60000): Promise<Attachment> {
     const stopWaitingAt = Date.now() + milliseconds;
     const step = (): Promise<Attachment> => {
-      return this.attachment(app, attachment).then((newAttachment) => {
+      return this.attachment(app, attachment).then(newAttachment => {
         if (newAttachment.state !== 'provisioning') {
           return newAttachment;
         }
         if (Date.now() > stopWaitingAt) {
           throw new Error('Timed out waiting for the Heroku attachment');
         }
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
           // Wait between checks so we don't hammer Heroku's API and run out of
           // quota if the user has a fast Internet connection.
           setTimeout(resolve, 1000);
-        }).then(() => step());
+        }).then(step);
       });
     };
     return step();
@@ -441,8 +441,8 @@ export class Client {
     const buildId: string = Build.toUrlSegment(build);
     return fetch(`${this.rootUrl}/apps/${appId}/builds/${buildId}`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
       },
       method: 'GET',
       referrer: 'no-referrer',
@@ -460,8 +460,8 @@ export class Client {
     const appId = App.toUrlSegment(app);
     return fetch(`${this.rootUrl}/apps/${appId}/builds`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
       },
       method: 'GET',
       referrer: 'no-referrer',
@@ -471,8 +471,8 @@ export class Client {
       return response.json();
     }).then((herokuBuilds: any) => {
       const builds: Build[] = [];
-      for (let i = 0; i < herokuBuilds.length; ++i) {
-        const build = Build.fromHerokuBuild(herokuBuilds[i]);
+      for (const herokuBuild of herokuBuilds) {
+        const build = Build.fromHerokuBuild(herokuBuild);
         if (build === null) {
           continue;
         }
@@ -488,8 +488,8 @@ export class Client {
     return fetch(`${this.rootUrl}/apps/${appId}/builds`, {
       body: createBuildOptionsToFetchBody(options),
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
         'Content-Type': 'application/json',
       },
       method: 'POST',
@@ -509,18 +509,18 @@ export class Client {
       Promise<Build> {
     const stopWaitingAt = Date.now() + milliseconds;
     const step = (): Promise<Build> => {
-      return this.build(app, build).then((newBuild) => {
+      return this.build(app, build).then(newBuild => {
         if (newBuild.status !== 'pending') {
           return newBuild;
         }
         if (Date.now() > stopWaitingAt) {
           throw new Error('Timed out waiting for the Heroku build');
         }
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
           // Wait between checks so we don't hammer Heroku's API and run out of
           // quota if the user has a fast Internet connection.
           setTimeout(resolve, 1000);
-        }).then(() => step());
+        }).then(step);
       });
     };
     return step();
@@ -531,8 +531,8 @@ export class Client {
     const appId = App.toUrlSegment(app);
     return fetch(`${this.rootUrl}/apps/${appId}/config-vars`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
       },
       method: 'GET',
       referrer: 'no-referrer',
@@ -553,8 +553,8 @@ export class Client {
     return fetch(`${this.rootUrl}/apps/${appId}/config-vars`, {
       body: configVarUpdatesToFetchBody(updates),
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
         'Content-Type': 'application/json',
       },
       method: 'PATCH',
@@ -574,8 +574,8 @@ export class Client {
     const appId = App.toUrlSegment(app);
     return fetch(`${this.rootUrl}/apps/${appId}/formation`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
       },
       method: 'GET',
       referrer: 'no-referrer',
@@ -585,8 +585,8 @@ export class Client {
       return response.json();
     }).then((herokuFormations: any) => {
       const formations: Formation[] = [];
-      for (let i = 0; i < herokuFormations.length; ++i) {
-        const formation = Formation.fromHerokuFormation(herokuFormations[i]);
+      for (const herokuFormation of herokuFormations) {
+        const formation = Formation.fromHerokuFormation(herokuFormation);
         if (formation === null) {
           continue;
         }
@@ -603,8 +603,8 @@ export class Client {
     return fetch(`${this.rootUrl}/apps/${appId}/formation`, {
       body: formationUpdatesToFetchBody(updates),
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
         'Content-Type': 'application/json',
       },
       method: 'PATCH',
@@ -615,8 +615,8 @@ export class Client {
       return response.json();
     }).then((herokuFormations: any) => {
       const formations: Formation[] = [];
-      for (let i = 0; i < herokuFormations.length; ++i) {
-        const formation = Formation.fromHerokuFormation(herokuFormations[i]);
+      for (const herokuFormation of herokuFormations) {
+        const formation = Formation.fromHerokuFormation(herokuFormation);
         if (formation === null) {
           continue;
         }
@@ -633,8 +633,8 @@ export class Client {
     const releaseId: string = Release.toUrlSegment(release);
     return fetch(`${this.rootUrl}/apps/${appId}/releases/${releaseId}`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
       },
       method: 'GET',
       referrer: 'no-referrer',
@@ -652,8 +652,8 @@ export class Client {
     const appId = App.toUrlSegment(app);
     return fetch(`${this.rootUrl}/apps/${appId}/releases`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
       },
       method: 'GET',
       referrer: 'no-referrer',
@@ -663,8 +663,8 @@ export class Client {
       return response.json();
     }).then((herokuReleases: any) => {
       const releases: Release[] = [];
-      for (let i = 0; i < herokuReleases.length; ++i) {
-        const release = Release.fromHerokuRelease(herokuReleases[i]);
+      for (const herokuRelease of herokuReleases) {
+        const release = Release.fromHerokuRelease(herokuRelease);
         if (release === null) {
           continue;
         }
@@ -681,8 +681,8 @@ export class Client {
     return fetch(`${this.rootUrl}/apps/${appId}/releases`, {
       body: createReleaseOptionsToFetchBody(options),
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
         'Content-Type': 'application/json',
       },
       method: 'POST',
@@ -702,18 +702,18 @@ export class Client {
       milliseconds: number = 60000): Promise<Release> {
     const stopWaitingAt = Date.now() + milliseconds;
     const step = (): Promise<Release> => {
-      return this.release(app, release).then((newRelease) => {
+      return this.release(app, release).then(newRelease => {
         if (newRelease.status !== 'pending') {
           return newRelease;
         }
         if (Date.now() > stopWaitingAt) {
           throw new Error('Timed out waiting for the Heroku release');
         }
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
           // Wait between checks so we don't hammer Heroku's API and run out of
           // quota if the user has a fast Internet connection.
           setTimeout(resolve, 1000);
-        }).then(() => step());
+        }).then(step);
       });
     };
     return step();
@@ -725,8 +725,8 @@ export class Client {
     const slugId: string = Slug.toUrlSegment(slug);
     return fetch(`${this.rootUrl}/apps/${appId}/slugs/${slugId}`, {
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
       },
       method: 'GET',
       referrer: 'no-referrer',
@@ -750,8 +750,8 @@ export class Client {
     return fetch(`${this.rootUrl}/apps/${appId}/slugs`, {
       body: createSlugOptionsToFetchBody(options),
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
         'Content-Type': 'application/json',
       },
       method: 'POST',
@@ -775,8 +775,8 @@ export class Client {
     return fetch(`${this.rootUrl}/sources`, {
       body: '{}',
       headers: {
-        'Accept': 'application/vnd.heroku+json; version=3',
-        'Authorization': this.token.authorizationHeader(),
+        Accept: 'application/vnd.heroku+json; version=3',
+        Authorization: this.token.authorizationHeader(),
         'Content-Type': 'application/json',
       },
       method: 'POST',

@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   entry: './src/index.ts',
   output: {
-    path: __dirname + '/lib',
+    path: path.resolve(__dirname, 'lib'),
     filename: 'index.js',
     library: 'heroku-web-client',
     libraryTarget: 'commonjs2',
@@ -20,7 +20,10 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        use: 'tslint-loader',
+        use: {
+          loader: 'tslint-loader',
+          options: {},
+        },
         enforce: 'pre',
       },
       {

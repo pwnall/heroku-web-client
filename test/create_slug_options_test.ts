@@ -21,7 +21,7 @@ describe('createSlugOptionsToFetchBody', () => {
 
   it('converts an options object with a Stack', () => {
     const body = JSON.parse(createSlugOptionsToFetchBody({
-        processTypes: { web: 'node/bin/node minimal.js' }, stack: stack}));
+        processTypes: { web: 'node/bin/node minimal.js' }, stack }));
     expect(body).to.deep.equal({
         process_types: { web: 'node/bin/node minimal.js' },
         stack: '01234567-89ab-cdef-0123-456789abcdef'});

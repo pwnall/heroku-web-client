@@ -10,7 +10,7 @@ export interface ConfigVarUpdates {
 export const configVarUpdatesToFetchBody =
     (updates: ConfigVarUpdates): string => {
   const fetchBody: any = {};
-  for (let name in updates) {
+  for (const name in updates) {
     if (updates.hasOwnProperty(name)) {
       const value = updates[name];
       fetchBody[name] = (value === null) ? value : value.toString();

@@ -5,10 +5,11 @@
     "allowUnusedLabels": false,
     "alwaysStrict": true,
     "declaration": false,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
-    "lib": ["dom", "es2015"],
+    "lib": ["dom", "dom.iterable", "es2017"],
     "module": "commonjs",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
@@ -25,8 +26,7 @@
     "rootDir": ".",
     "sourceMap": true,
     "strictNullChecks": false,
-    "target": "es2015",
-    "types": ["mocha", "text-encoding"]
+    "target": "es2017"
   },
   "exclude": [
     ".git",

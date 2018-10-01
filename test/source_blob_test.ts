@@ -33,7 +33,7 @@ describe('SourceBlob', () => {
 
   describe('.checksumFor', () => {
     it('encodes an empty buffer correctly', () => {
-      return SourceBlob.checksumFor(new ArrayBuffer(0)).then((digest) => {
+      return SourceBlob.checksumFor(new ArrayBuffer(0)).then(digest => {
         // The hardcoded value was checked against Ruby's SHA2.
         expect(digest).to.equal(
             'SHA256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca49599' +
@@ -41,8 +41,8 @@ describe('SourceBlob', () => {
       });
     });
     it('encodes an "abc" buffer correctly', () => {
-      const bytes = (new TextEncoder()).encode('abc').buffer;
-      return SourceBlob.checksumFor(bytes).then((digest) => {
+      const bytes = (new TextEncoder()).encode('abc').buffer as ArrayBuffer;
+      return SourceBlob.checksumFor(bytes).then(digest => {
         // The hardcoded value was checked against Ruby's SHA2.
         expect(digest).to.equal(
             'SHA256:ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff' +

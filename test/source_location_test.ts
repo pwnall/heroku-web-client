@@ -28,14 +28,14 @@ describe('SourceLocation', () => {
 
     it('causes #download to return the uploaded archive', () => {
       let sourceLocation: SourceLocation;
-      return client.createSourceLocation().then((createdSourceLocation) => {
+      return client.createSourceLocation().then(createdSourceLocation => {
         sourceLocation = createdSourceLocation;
         return sourceLocation.upload(appArchive);
       }).then(() => {
         return sourceLocation.download();
-      }).then((response) => {
+      }).then(response => {
         return response.arrayBuffer();
-      }).then((responseBuffer) => {
+      }).then(responseBuffer => {
         expect(responseBuffer).to.deep.equal(appArchive);
       });
     });

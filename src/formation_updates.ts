@@ -17,7 +17,7 @@ export const formationUpdatesToFetchBody =
     (updates: FormationUpdates): string => {
   const fetchUpdates: any = [];
   const fetchBody: any = { updates: fetchUpdates };
-  for (let processType in updates) {
+  for (const processType in updates) {
     if (updates.hasOwnProperty(processType)) {
       const update = updates[processType];
       fetchUpdates.push({

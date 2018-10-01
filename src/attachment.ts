@@ -94,8 +94,8 @@ export class Attachment {
       return null;
     }
     const config_vars: Array<any> = herokuAddon.config_vars;
-    for (let i = 0; i < config_vars.length; ++i) {
-      if (typeof(config_vars[i]) !== 'string') {
+    for (const configVar of config_vars) {
+      if (typeof(configVar) !== 'string') {
         return null;
       }
     }

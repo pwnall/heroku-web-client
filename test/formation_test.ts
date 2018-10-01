@@ -24,17 +24,17 @@ describe('Formation', () => {
 
     it('parses a live API response', () => {
       const formation = Formation.fromHerokuFormation({
-        'app': {
-          'id': '8e26f783-0c58-4a7e-ad59-5b84587085da',
-          'name': 'hwc-test-ixg46soc-widx6r',
+        app: {
+          id: '8e26f783-0c58-4a7e-ad59-5b84587085da',
+          name: 'hwc-test-ixg46soc-widx6r',
         },
-        'command': 'npm start',
-        'created_at': '2017-01-02T13:21:17Z',
-        'id': '685ee8e9-fac4-4550-83ad-06783f9fa9c8',
-        'quantity': 1,
-        'size': 'Free',
-        'type': 'web',
-        'updated_at': '2017-01-02T13:21:19Z',
+        command: 'npm start',
+        created_at: '2017-01-02T13:21:17Z',
+        id: '685ee8e9-fac4-4550-83ad-06783f9fa9c8',
+        quantity: 1,
+        size: 'Free',
+        type: 'web',
+        updated_at: '2017-01-02T13:21:19Z',
       });
       expect(formation).to.be.an.instanceOf(Formation);
       expect(formation.appId).to.equal('8e26f783-0c58-4a7e-ad59-5b84587085da');

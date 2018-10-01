@@ -15,8 +15,7 @@ describe('createReleaseOptionsToFetchBody', () => {
   });
 
   it('converts an options object with a Slug', () => {
-    const body = JSON.parse(createReleaseOptionsToFetchBody({
-        slug: slug}));
+    const body = JSON.parse(createReleaseOptionsToFetchBody({ slug }));
     expect(body).to.deep.equal({
         slug: '01234567-89ab-cdef-0123-456789abcdef' });
   });
@@ -29,7 +28,7 @@ describe('createReleaseOptionsToFetchBody', () => {
 
   it('converts an options object with a Slug and a description', () => {
     const body = JSON.parse(createReleaseOptionsToFetchBody({
-        description: 'Added a new feature', slug: slug }));
+        description: 'Added a new feature', slug }));
     expect(body).to.deep.equal({
         description: 'Added a new feature',
         slug: '01234567-89ab-cdef-0123-456789abcdef' });

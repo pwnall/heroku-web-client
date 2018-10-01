@@ -32,8 +32,8 @@ export class Build {
     this.appId = herokuBuild.app.id;
     if (herokuBuild.buildpacks) {
       this.buildpackUrls = [];
-      for (let i = 0; i < herokuBuild.buildpacks.length; ++i) {
-        this.buildpackUrls.push(herokuBuild.buildpacks[i].url);
+      for (const buildPack of herokuBuild.buildpacks) {
+        this.buildpackUrls.push(buildPack.url);
       }
     } else {
       this.buildpackUrls = null;
@@ -85,7 +85,7 @@ export class Build {
       return null;
     }
     if (herokuBuild.buildpacks !== null) {
-      for (let buildPack of herokuBuild.buildpacks) {
+      for (const buildPack of herokuBuild.buildpacks) {
         if (typeof(buildPack) !== 'object' ||
             typeof(buildPack.url) !== 'string') {
           return null;

@@ -15,8 +15,7 @@ describe('createBlobOptionsToFetchBody', () => {
   });
 
   it('converts an options object with mandatory options', () => {
-    const body = JSON.parse(createBuildOptionsToFetchBody({
-        sourceBlob: sourceBlob}));
+    const body = JSON.parse(createBuildOptionsToFetchBody({ sourceBlob }));
     expect(body).to.deep.equal({
         source_blob: { checksum: herokuSourceBlobShaValue,
         url: 'https://example.com/source.tgz?token=xyz', version: 'v1.3.0' }});
@@ -24,7 +23,7 @@ describe('createBlobOptionsToFetchBody', () => {
 
   it('converts an options object with null buildpacks', () => {
     const body = JSON.parse(createBuildOptionsToFetchBody({
-        buildpackUrls: null, sourceBlob: sourceBlob}));
+        buildpackUrls: null, sourceBlob }));
     expect(body).to.deep.equal({
         buildpacks: null, source_blob: { checksum: herokuSourceBlobShaValue,
         url: 'https://example.com/source.tgz?token=xyz', version: 'v1.3.0' }});
@@ -33,7 +32,7 @@ describe('createBlobOptionsToFetchBody', () => {
   it('converts an options object with a buildpack', () => {
     const body = JSON.parse(createBuildOptionsToFetchBody({
         buildpackUrls: ['https://github.com/heroku/heroku-buildpack-ruby'],
-        sourceBlob: sourceBlob}));
+        sourceBlob }));
     expect(body).to.deep.equal({
         buildpacks: [{
         url: 'https://github.com/heroku/heroku-buildpack-ruby' }],

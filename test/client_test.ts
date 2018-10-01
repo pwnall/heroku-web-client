@@ -28,7 +28,7 @@ describe('Client', () => {
         expect(token).to.be.an.instanceOf(AccessToken);
         expect(token.toJSON().token).to.be.a('string');
         return client.revokeAuthorization();
-      }).then((success) => {
+      }).then(success => {
         expect(success).to.equal(true);
       });
     });
@@ -88,13 +88,13 @@ describe('Client', () => {
 
       it('creates an app that shows up in the #apps list', () => {
         return client.createApp({
-            name: appName, region: 'us', stack: 'cedar-14'}).then((app) => {
+            name: appName, region: 'us', stack: 'heroku-18'}).then(app => {
           expect(app.name).to.equal(appName);
           expect(app.regionName).to.equal('us');
-          expect(app.stackName).to.equal('cedar-14');
+          expect(app.stackName).to.equal('heroku-18');
 
           return client.apps();
-        }).then((apps) => {
+        }).then(apps => {
           expect(apps.length).to.be.greaterThan(0);
           assert(apps.find((app: App) => app.name === appName));
         });
@@ -103,18 +103,18 @@ describe('Client', () => {
       it('creates an app whose status can be obtained by #app', () => {
         let appId: string;
         return client.createApp({
-            name: appName, region: 'us', stack: 'cedar-14'}).then((app) => {
+            name: appName, region: 'us', stack: 'heroku-18'}).then(app => {
           expect(app.name).to.equal(appName);
           expect(app.regionName).to.equal('us');
-          expect(app.stackName).to.equal('cedar-14');
+          expect(app.stackName).to.equal('heroku-18');
 
           appId = app.id;
           return client.app(app.id);
-        }).then((app) => {
+        }).then(app => {
           expect(app.id).to.equal(appId);
           expect(app.name).to.equal(appName);
           expect(app.regionName).to.equal('us');
-          expect(app.stackName).to.equal('cedar-14');
+          expect(app.stackName).to.equal('heroku-18');
         });
       });
     });
@@ -125,31 +125,31 @@ describe('Client', () => {
       beforeEach(() => {
         appName = `hwc-test-${(Date.now() + Math.random()).toString(36)}`.
             replace('.', '-');
-        return client.createApp({name: appName}).then((app) => {
+        return client.createApp({name: appName}).then(app => {
           createdApp = app;
         });
       });
 
       describe('with a name', () => {
         it('deletes the app so it does not show up on the apps list', () => {
-          return client.deleteApp(appName).then((deletedApp) => {
+          return client.deleteApp(appName).then(deletedApp => {
             expect(deletedApp.name).to.equal(appName);
             expect(deletedApp.id).to.equal(createdApp.id);
           }).then(() => {
             return client.apps();
-          }).then((apps) => {
+          }).then(apps => {
             assert(!apps.find((app: App) => app.name === appName));
           });
         });
       });
       describe('with an App', () => {
         it('deletes the app so it does not show up on the apps list', () => {
-          return client.deleteApp(createdApp).then((deletedApp) => {
+          return client.deleteApp(createdApp).then(deletedApp => {
             expect(deletedApp.name).to.equal(appName);
             expect(deletedApp.id).to.equal(createdApp.id);
           }).then(() => {
             return client.apps();
-          }).then((apps) => {
+          }).then(apps => {
             assert(!apps.find((app: App) => app.name === appName));
           });
         });
@@ -166,10 +166,10 @@ describe('Client', () => {
     });
 
     describe('#stacks', () => {
-      it('obtains a non-empty array of stacks including cedar-14', () => {
+      it('obtains a non-empty array of stacks including heroku-18', () => {
         return client.stacks().then((stacks: Stack[]) => {
           expect(stacks.length).to.be.greaterThan(0);
-          assert(stacks.find((stack: Stack) => stack.name === 'cedar-14'));
+          assert(stacks.find((stack: Stack) => stack.name === 'heroku-18'));
         });
       });
     });
@@ -178,7 +178,7 @@ describe('Client', () => {
   describe('without any token', () => {
     describe('#addon', () => {
       it('obtains information about postgresql', () => {
-        return client.addon('heroku-postgresql').then((addon) => {
+        return client.addon('heroku-postgresql').then(addon => {
           expect(addon.name).to.equal('heroku-postgresql');
         });
       });
@@ -198,7 +198,7 @@ describe('Client', () => {
       it('obtains an array of plans for postgresql w/ a free plan', () => {
         return client.plans('heroku-postgresql').then((plans: Plan[]) => {
           expect(plans.length).to.be.greaterThan(0);
-          assert(plans.find((plan) => plan.priceCents === 0));
+          assert(plans.find(plan => plan.priceCents === 0));
         });
       });
     });

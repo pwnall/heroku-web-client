@@ -12,7 +12,7 @@ export interface SourceBlobJson {
 
   /** Source code version. */
   version: string | null;
-};
+}
 
 /** A source code packagge that will be deployed to Heroku. */
 export class SourceBlob implements SourceBlobJson {
@@ -55,20 +55,17 @@ export class SourceBlob implements SourceBlobJson {
   }
 
   /** Computes the checksum for a Heroku data blob. */
-  public static checksumFor(data: BufferSource): Promise<string> {
-    return crypto.subtle.digest('sha-256', data).then((arrayBuffer) => {
-      let result: string = 'SHA256:';
-      const view = new Uint8Array(arrayBuffer);
-      const length = view.length;
-      for (let i = 0; i < length; ++i) {
-        const byte = view[i];
-        result += (byte >> 4).toString(16);
-        result += (byte & 0xf).toString(16);
-      }
-      return result;
-    }) as Promise<string>;
-    // HACK(pwnall): TypeScript's typings incorrectly declare digest to return
-    //     PromiseLike<string>. The Web Crypto standard's IDL states that
-    //     digest returns a Promise.
+  public static async checksumFor(data: ArrayBuffer): Promise<string> {
+    const arrayBuffer = await crypto.subtle.digest('sha-256', data);
+
+    let result: string = 'SHA256:';
+    const view = new Uint8Array(arrayBuffer);
+    const length = view.length;
+    for (let i = 0; i < length; ++i) {
+      const byte = view[i];
+      result += (byte >> 4).toString(16);
+      result += (byte & 0xF).toString(16);
+    }
+    return result;
   }
 }

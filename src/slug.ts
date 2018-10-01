@@ -40,7 +40,7 @@ export class Slug {
     this.createdAt = new Date(herokuSlug.created_at);
     this.id = herokuSlug.id;
     this.processTypes = {};
-    for (let processName in herokuSlug.process_types) {
+    for (const processName in herokuSlug.process_types) {
       if (herokuSlug.process_types.hasOwnProperty(processName)) {
         const commandLine = herokuSlug.process_types[processName];
         this.processTypes[processName] = commandLine.toString();

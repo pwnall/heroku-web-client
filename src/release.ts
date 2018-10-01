@@ -30,8 +30,8 @@ export class Release {
     this.appId = herokuRelease.app.id;
     this.appName = herokuRelease.app.name;
     this.addonPlans = [];
-    for (let i = 0; i < herokuRelease.addon_plan_names.length; ++i) {
-      this.addonPlans.push(herokuRelease.addon_plan_names[i]);
+    for (const addonPlanName of herokuRelease.addon_plan_names) {
+      this.addonPlans.push(addonPlanName);
     }
     this.createdAt = new Date(herokuRelease.created_at);
     this.current = herokuRelease.current;
@@ -70,8 +70,8 @@ export class Release {
       return null;
     }
 
-    for (let i = 0; i < herokuRelease.addon_plan_names.length; ++i) {
-      if (typeof(herokuRelease.addon_plan_names[i]) !== 'string') {
+    for (const addonPlanName of herokuRelease.addon_plan_names) {
+      if (typeof(addonPlanName) !== 'string') {
         return null;
       }
     }

@@ -24,8 +24,8 @@ export const createBuildOptionsToFetchBody =
     const urls = options.buildpackUrls;
     if (urls !== null) {
       fetchBody.buildpacks = [];
-      for (let i = 0; i < urls.length; ++i) {
-        fetchBody.buildpacks.push({ url: urls[i] });
+      for (const url of urls) {
+        fetchBody.buildpacks.push({ url });
       }
     } else {
       fetchBody.buildpacks = null;

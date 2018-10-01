@@ -98,7 +98,7 @@ describe('AccessToken', () => {
 });
 
 describe('RefreshToken', () => {
-  let expirationTime = Date.now() + 86400;
+  const expirationTime = Date.now() + 86400;
   let token: RefreshToken;
 
   beforeEach(() => {

@@ -21,8 +21,7 @@ describe('createAttachmentOptionsToFetchBody', () => {
   });
 
   it('converts an options object that uses a Plan', () => {
-    const body = JSON.parse(createAttachmentOptionsToFetchBody({
-        plan: plan}));
+    const body = JSON.parse(createAttachmentOptionsToFetchBody({ plan }));
     expect(body).to.deep.equal({
         plan: '11234567-89ab-cdef-0123-456789abcdef' });
   });

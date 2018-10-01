@@ -27,13 +27,13 @@ export class HerokuError extends Error {
       return Promise.resolve(response);
     }
 
-    return response.json().catch((syntaxError) => {  // Heroku error.
+    return response.json().catch(syntaxError => {  // Heroku error.
       return Promise.reject(new HerokuError(
           `status_${status}`,
           'The Heroku API server response contained invalid JSON: ' +
           syntaxError.message,
           defaultUrl));
-    }).then((json) => Promise.reject(new HerokuError(
+    }).then(json => Promise.reject(new HerokuError(
         (json.id || 'missing_id').toString(),
         (json.message || '(Heroku error missing message)').toString(),
         (json.url || defaultUrl).toString())));

@@ -28,7 +28,7 @@ describe('Slug', () => {
       expect(slug.processTypes).to.deep.equal({ web: './bin/web -p $PORT' });
       expect(slug.size).to.equal(2048);
       expect(slug.stackId).to.equal('11234567-89ab-cdef-0123-456789abcdef');
-      expect(slug.stackName).to.equal('cedar-14');
+      expect(slug.stackName).to.equal('heroku-18');
       expect(slug.updatedAt.toISOString()).to.equal(
           '2012-01-02T12:00:00.000Z');
     });
@@ -63,10 +63,10 @@ describe('Slug', () => {
         email: herokuAccount.email, password: herokuAccount.password });
       return client.login(credential).then(() => {
         return client.createApp({name: appName});
-      }).then((createdApp) => {
+      }).then(createdApp => {
         app = createdApp;
         return SourceBlob.checksumFor(appSlug);
-      }).then((checksum) => {
+      }).then(checksum => {
         slugChecksum = checksum;
       });
     });
@@ -86,13 +86,13 @@ describe('Slug', () => {
       return client.createSlug(app, {
           checksum: slugChecksum,
           processTypes: { web: 'node/bin/node minimal.js' },
-          stack: 'cedar-14' }).then((slug) => {
+          stack: 'heroku-18' }).then(slug => {
         slugId = slug.id;
         console.log(slug);
         return slug.upload(appSlug);
       }).then(() => {
         return client.slug(app, slugId);
-      }).then((slug) => {
+      }).then(slug => {
         console.log(slug);
         expect(slug.size).to.equal(appSlug.byteLength);
       });
